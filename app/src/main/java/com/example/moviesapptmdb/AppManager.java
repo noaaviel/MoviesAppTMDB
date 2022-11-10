@@ -14,7 +14,8 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class AppManager extends Application {
 
     private static Retrofit retrofit= new Retrofit.Builder().baseUrl("https://api.themoviedb.org/")
-            .addConverterFactory(GsonConverterFactory.create()).client(new OkHttpClient().newBuilder().addInterceptor(newInterceptor()).build())
+            .addConverterFactory(GsonConverterFactory.create())
+            .client(new OkHttpClient().newBuilder().addInterceptor(newInterceptor()).build())
             .build();
 
     //retrofit =

@@ -2,7 +2,7 @@ package com.example.moviesapptmdb;
 
 import com.google.gson.annotations.SerializedName;
 
-//uses for POST method-> getting the movie by JSON structure in JSON array
+//used for POST method-> getting the movie by JSON structure in JSON array
 //if needed -> the name of the variable differs from the JSON key we can use annotation
 // @serializedName("JSON KEY")
 public class MovieModelClass {

@@ -12,4 +12,7 @@ public interface tmdbAPI {
     @GET("3/movie/popular")
     Call<MovieList> getPopularMovies(); //will return an object of type MovieModelClass
     //encapsulates a request and response for 1 get
+    @GET("3/movie/top_rated")
+    Call<MovieList> getTopMovies();
+
 }

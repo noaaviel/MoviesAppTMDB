@@ -18,7 +18,6 @@ import java.util.List;
 public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
 
     private Context mContext;
-
     private List<MovieModelClass> mData;
 
     public Adaptery(Context mContext, List<MovieModelClass> mData) {
@@ -46,7 +45,6 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
         //getting the link for the image-> we get from json incomplete url
         //we need to build it using the general directory of images from tmdb
         //[https://image.tmdb.org/t/p/w500]
-
 
         //using Glide library to import image by url
         Glide.with(mContext).load("https://image.tmdb.org/t/p/w500"+mData.get(position).getImage()).into(holder.image);

@@ -4,35 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import okhttp3.HttpUrl;
-import okhttp3.Interceptor;
-import okhttp3.OkHttpClient;
-import okhttp3.Request;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -40,7 +23,8 @@ public class MainActivity extends AppCompatActivity {
 
     //json: https://run.mocky.io/v3/669bfc8d-6f62-4206-b7d1-ab3f5e6d4167
     //json popular movies: https://api.themoviedb.org/3/movie/popular?api_key=3930eda0423c873bc5ce559094909f9d
-    List<MovieModelClass> movieList;
+    List<MovieModelClass> popMovieList;
+    List<MovieModelClass> topMovieList;
     RecyclerView recyclerView;
     ImageView imageView;
 
@@ -48,7 +32,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        movieList = new ArrayList<>();
+        popMovieList = new ArrayList<>();
+        topMovieList = new ArrayList<>();
         recyclerView = findViewById(R.id.recyclerView);
         imageView = findViewById(R.id.mainImg);
         Glide.with(this).load(R.drawable.thegodfather).into(imageView);
@@ -56,8 +41,8 @@ public class MainActivity extends AppCompatActivity {
         //base url: https://api.themoviedb.org/
 
         //execute:
-        Call<MovieList> call = AppManager.jsonPopMovies.getPopularMovies();
-        call.enqueue(new Callback<MovieList>() {
+        Call<MovieList> callPopMovies = AppManager.jsonPopMovies.getPopularMovies();
+        callPopMovies.enqueue(new Callback<MovieList>() {
             @Override
             public void onResponse(Call<MovieList> call, Response<MovieList> response) {
                 //successful
@@ -69,24 +54,17 @@ public class MainActivity extends AppCompatActivity {
                 List<MovieModelClass> popMovies = response.body().movies;
              //   for(MovieModelClass model: popMovies){
                 for(int i=0;i<popMovies.size();i++){
-                   /* String id = "";
-                    String name = "";
-                    String image = "";
-                    id+= model.getId();
-                    name+= model.getName();
-                    image+= model.getImage();*/
 
-                    //אין לזה הגיוןןןןןן בכלללללללללללללל
                     MovieModelClass model = new MovieModelClass();
                     model.setId(popMovies.get(i).getId());
                     model.setName(popMovies.get(i).getName());
                     model.setImage(popMovies.get(i).getImage());
 
                     //no reason for this part either why cant
-                    movieList.add(model);
+                    popMovieList.add(model);
 
                 }
-                PutDataIntoRecyclerView(movieList);
+                PutDataIntoRecyclerView(popMovieList);
 
             }
 
@@ -95,6 +73,39 @@ public class MainActivity extends AppCompatActivity {
                 //something bad happened t.getMessage() will indicate what
                 Log.d("noa",t.getMessage());
 
+            }
+        });
+
+        Call<MovieList> callTopMovies = AppManager.jsonPopMovies.getTopMovies();
+        callTopMovies.enqueue(new Callback<MovieList>() {
+            @Override
+            public void onResponse(Call<MovieList> call, Response<MovieList> response) {
+                //successful
+                if(!response.isSuccessful()){ //200->300 good otherwise bad
+                    //set text to response.code -> http code
+                    Log.d("noa","" + response.code());
+                    return;
+                }
+                List<MovieModelClass> topMovies = response.body().movies;
+                //   for(MovieModelClass model: popMovies){
+                for(int i=0;i<topMovies.size();i++){
+
+                    MovieModelClass model = new MovieModelClass();
+                    model.setId(topMovies.get(i).getId());
+                    model.setName(topMovies.get(i).getName());
+                    model.setImage(topMovies.get(i).getImage());
+
+                    //no reason for this part either why cant
+                    topMovies.add(model);
+
+                }
+                PutDataIntoRecyclerView(topMovies);
+
+            }
+
+            @Override
+            public void onFailure(Call<MovieList> call, Throwable t) {
+                Log.d("noa",t.getMessage());
             }
         });
 
