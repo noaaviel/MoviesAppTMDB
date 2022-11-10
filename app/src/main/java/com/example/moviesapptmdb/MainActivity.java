@@ -4,11 +4,17 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,19 +30,26 @@ public class MainActivity extends AppCompatActivity {
     //json: https://run.mocky.io/v3/669bfc8d-6f62-4206-b7d1-ab3f5e6d4167
     //json popular movies: https://api.themoviedb.org/3/movie/popular?api_key=3930eda0423c873bc5ce559094909f9d
     List<MovieModelClass> popMovieList;
-    List<MovieModelClass> topMovieList;
+
     RecyclerView recyclerView;
     ImageView imageView;
+    TextView topMoviesText;
+    Button topMovies;
+    SessionKey sessionKey;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         popMovieList = new ArrayList<>();
-        topMovieList = new ArrayList<>();
+
+        topMovies = findViewById(R.id.BTN_top_movies);
+        topMoviesText= findViewById(R.id.TXT_top_movies);
         recyclerView = findViewById(R.id.recyclerView);
-        imageView = findViewById(R.id.mainImg);
-        Glide.with(this).load(R.drawable.thegodfather).into(imageView);
+
+       // imageView = findViewById(R.id.mainImg);
+       // Glide.with(this).load(R.drawable.thegodfather).into(imageView);
 
         //base url: https://api.themoviedb.org/
 
@@ -76,42 +89,51 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        Call<MovieList> callTopMovies = AppManager.jsonPopMovies.getTopMovies();
-        callTopMovies.enqueue(new Callback<MovieList>() {
+        topMovies.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onResponse(Call<MovieList> call, Response<MovieList> response) {
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this, TopMoviesActivity.class));
+            }
+        });
+
+        Call<SessionKey> sessionKeyCall = AppManager.jsonPopMovies.getSessionKey();
+        sessionKeyCall.enqueue(new Callback<SessionKey>() {
+            @Override
+            public void onResponse(Call<SessionKey> call, Response<SessionKey> response) {
                 //successful
                 if(!response.isSuccessful()){ //200->300 good otherwise bad
                     //set text to response.code -> http code
                     Log.d("noa","" + response.code());
                     return;
                 }
-                List<MovieModelClass> topMovies = response.body().movies;
-                //   for(MovieModelClass model: popMovies){
-                for(int i=0;i<topMovies.size();i++){
-
-                    MovieModelClass model = new MovieModelClass();
-                    model.setId(topMovies.get(i).getId());
-                    model.setName(topMovies.get(i).getName());
-                    model.setImage(topMovies.get(i).getImage());
-
-                    //no reason for this part either why cant
-                    topMovies.add(model);
-
-                }
-                PutDataIntoRecyclerView(topMovies);
-
+                //String guest_session_id = response.body().guest_session_id;
+                sessionKey.setGuest_session_id(response.body().guest_session_id);
+                sessionKey.setExpires_at(response.body().expires_at);
+                sessionKey.setSuccess(response.body().success);
             }
 
             @Override
-            public void onFailure(Call<MovieList> call, Throwable t) {
+            public void onFailure(Call<SessionKey> call, Throwable t) {
                 Log.d("noa",t.getMessage());
             }
         });
 
+        AppManager.jsonPopMovies.RateMovie(663712, "3930eda0423c873bc5ce559094909f9d", sessionKey.getGuest_session_id(), 8.5, new Callback<RateMovieResponse>() {
+            @Override
+            public void onResponse(Call<RateMovieResponse> call, Response<RateMovieResponse> response) {
+                Toast.makeText(MainActivity.this, response.body().getStatus_message(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onFailure(Call<RateMovieResponse> call, Throwable t) {
+                Log.d("noa",t.getMessage());
+            }
+        });
         //GetData getData = new GetData();
         //getData.execute();
     }
+
+
 
 
 
