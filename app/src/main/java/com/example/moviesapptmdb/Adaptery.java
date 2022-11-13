@@ -19,11 +19,23 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
 
     private Context mContext;
     private List<MovieModelClass> mData;
+    private static OnMovieListener onMovieListener;
+
+
 
     public Adaptery(Context mContext, List<MovieModelClass> mData) {
         this.mContext = mContext;
         this.mData = mData;
+        //this.onMovieListener = onMovieListener;
     }
+
+    public Adaptery(Context mContext, OnMovieListener onMovieListener,List<MovieModelClass> mData) {
+        this.mContext = mContext;
+        this.onMovieListener = onMovieListener;
+        this.mData = mData;
+    }
+
+
 
     @NonNull
     @Override
@@ -32,7 +44,8 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
         LayoutInflater layoutInflater = LayoutInflater.from(mContext);
         v = layoutInflater.inflate(R.layout.movie_item,parent,false);
 
-        return new MyViewHolder(v);
+
+        return new MyViewHolder(v,onMovieListener);
 
     }
 
@@ -49,6 +62,7 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
         //using Glide library to import image by url
         Glide.with(mContext).load("https://image.tmdb.org/t/p/w500"+mData.get(position).getImage()).into(holder.image);
 
+
     }
 
     @Override
@@ -57,16 +71,18 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
     }
 
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    public static class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         TextView id,name;
         ImageView image;
+        OnMovieListener onMovieListener;
 
         //Holds a card view
 
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView,OnMovieListener onMovieListener) {
             super(itemView);
-
+            this.onMovieListener = onMovieListener;
+            itemView.setOnClickListener(this);
             init();
         }
 
@@ -75,7 +91,12 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
             name = itemView.findViewById(R.id.name_text);
             image = itemView.findViewById(R.id.imageView);
         }
-    }
 
+
+        @Override
+        public void onClick(View v) {
+            onMovieListener.onMovieClick(v,this.getAdapterPosition());
+        }
+    }
 
 }

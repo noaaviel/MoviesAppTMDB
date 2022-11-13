@@ -71,11 +71,11 @@ public class TopMoviesActivity extends AppCompatActivity {
     }
 
     private void PutDataIntoRecyclerView(List<MovieModelClass> movieList){
-        Adaptery adaptery = new Adaptery(this,movieList);
+        MainActivity.adaptery = new Adaptery(this,movieList);
         // recyclerView.setLayoutManager(new LinearLayoutManager(this));
         topRecycler.setLayoutManager(new GridLayoutManager(this,3));
 
-        topRecycler.setAdapter(adaptery);
+        topRecycler.setAdapter(MainActivity.adaptery);
     }
 
     @Override

@@ -2,20 +2,22 @@ package com.example.moviesapptmdb;
 
 public class SessionKey {
 
-    /*
-{
-    "success": true,
-    "guest_session_id": "4f408212d8504f2a66d293d50035b6d9",
-    "expires_at": "2022-11-11 16:04:15 UTC"
+  /*
+  * { example
+  "success": true,
+  "expires_at": "2016-08-26 17:04:39 UTC",
+  "request_token": "ff5c7eeb5a8870efe3cd7fc5c282cffd26800ecd"
 }
-     */
+  *
+  *
+  * */
     boolean success;
-    String guest_session_id;
+    String request_token;
     String expires_at;
 
     public SessionKey(boolean success, String guest_session_id, String expires_at) {
         this.success = success;
-        this.guest_session_id = guest_session_id;
+        this.request_token = guest_session_id;
         this.expires_at = expires_at;
     }
 
@@ -27,12 +29,12 @@ public class SessionKey {
         this.success = success;
     }
 
-    public String getGuest_session_id() {
-        return guest_session_id;
+    public String getRequest_token() {
+        return request_token;
     }
 
-    public void setGuest_session_id(String guest_session_id) {
-        this.guest_session_id = guest_session_id;
+    public void setRequest_token(String request_token) {
+        this.request_token = request_token;
     }
 
     public String getExpires_at() {
