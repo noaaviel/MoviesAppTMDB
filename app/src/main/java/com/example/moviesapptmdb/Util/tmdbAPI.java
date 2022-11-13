@@ -1,4 +1,6 @@
-package com.example.moviesapptmdb;
+package com.example.moviesapptmdb.Util;
+
+import com.example.moviesapptmdb.MovieList;
 
 import java.util.List;
 
@@ -26,28 +28,8 @@ public interface tmdbAPI {
     //https://api.themoviedb.org/3/movie/{movie_id}/rating?api_key=3930eda0423c873bc5ce559094909f9d
 
     //https://api.themoviedb.org/3/authentication/token/new?api_key=3930eda0423c873bc5ce559094909f9d
-    @GET("3/authentication/token/new")
-    Call<SessionKey> getSessionKey();
-
-    @FormUrlEncoded
-    @POST("/authentication/session/new")
-    public void auth(
-            @Query("api_key") String api_key,
-            @Field("request_token") String request_token
-    );
 
 
-
-    @Headers("Content-Type: application/json")
-    @POST("3/movie/{movie_id}/rating")
-       Call<RateMovieResponse> RateMovie(
-            @Path("movie_id") int id,
-            @Query("api_key") String api_key,
-            @Query("guest_session_id") String guest_session_id,
-            @Field("value") double value
-           // Callback<RateMovieResponse> callback //callback is used to get the response from api
-            //https://abhiandroid.com/programming/retrofit
-            );
 
     /*@Path – variable substitution for the API endpoint. For example movie id will be swapped for{id} in the URL endpoint.
 

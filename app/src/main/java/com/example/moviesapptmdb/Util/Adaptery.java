@@ -1,4 +1,4 @@
-package com.example.moviesapptmdb;
+package com.example.moviesapptmdb.Util;
 
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -11,7 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.annotations.SerializedName;
+import com.example.moviesapptmdb.MovieModelClass;
+import com.example.moviesapptmdb.R;
 
 import java.util.List;
 
@@ -23,11 +24,11 @@ public class Adaptery extends RecyclerView.Adapter<Adaptery.MyViewHolder> {
 
 
 
-    public Adaptery(Context mContext, List<MovieModelClass> mData) {
+  /*  public Adaptery(Context mContext, List<MovieModelClass> mData) {
         this.mContext = mContext;
         this.mData = mData;
         //this.onMovieListener = onMovieListener;
-    }
+    }*/
 
     public Adaptery(Context mContext, OnMovieListener onMovieListener,List<MovieModelClass> mData) {
         this.mContext = mContext;

@@ -2,6 +2,8 @@ package com.example.moviesapptmdb;
 
 import android.app.Application;
 
+import com.example.moviesapptmdb.Util.tmdbAPI;
+
 import java.io.IOException;
 
 import okhttp3.HttpUrl;

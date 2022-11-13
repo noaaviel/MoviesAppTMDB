@@ -1,4 +1,4 @@
-package com.example.moviesapptmdb;
+package com.example.moviesapptmdb.Util;
 
 import android.view.View;
 

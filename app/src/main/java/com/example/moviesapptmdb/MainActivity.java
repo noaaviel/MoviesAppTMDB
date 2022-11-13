@@ -2,7 +2,6 @@ package com.example.moviesapptmdb;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.ItemTouchHelper;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
@@ -15,6 +14,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.example.moviesapptmdb.Util.Adaptery;
+import com.example.moviesapptmdb.Util.OnMovieListener;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,7 +24,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class MainActivity extends AppCompatActivity implements OnMovieListener{
+public class MainActivity extends AppCompatActivity implements OnMovieListener {
 
     private static String JSON_URL= "https://api.themoviedb.org/3/movie/popular?api_key=3930eda0423c873bc5ce559094909f9d";
 
@@ -34,8 +36,11 @@ public class MainActivity extends AppCompatActivity implements OnMovieListener{
     ImageView imageView;
     TextView topMoviesText;
     Button topMovies;
-    SessionKey sessionKey;
+
     static Adaptery adaptery;
+    static String id,name;
+    static String img;
+
 
     public List<MovieModelClass> getPopMovieList() {
         return popMovieList;
@@ -54,6 +59,7 @@ public class MainActivity extends AppCompatActivity implements OnMovieListener{
         topMovies = findViewById(R.id.BTN_top_movies);
         topMoviesText= findViewById(R.id.TXT_top_movies);
         recyclerView = findViewById(R.id.recyclerView);
+
 
 
 
@@ -192,6 +198,12 @@ public class MainActivity extends AppCompatActivity implements OnMovieListener{
     @Override
     public void onMovieClick(View v, int position) {
         Toast.makeText(MainActivity.this,popMovieList.get(position).getName(), Toast.LENGTH_SHORT).show();
+        id= popMovieList.get(position).getId();
+        name = popMovieList.get(position).getName();
+        img = popMovieList.get(position).getImage();
+        startActivity(new Intent(MainActivity.this, PopUpActivity.class));
+
+
     }
 
 

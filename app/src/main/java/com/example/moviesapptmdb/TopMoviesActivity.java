@@ -4,12 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.widget.Button;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.example.moviesapptmdb.Util.Adaptery;
+import com.example.moviesapptmdb.Util.OnMovieListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +22,7 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class TopMoviesActivity extends AppCompatActivity {
+public class TopMoviesActivity extends AppCompatActivity implements OnMovieListener {
     List<MovieModelClass> topMovieList;
     RecyclerView topRecycler;
     ImageView tmdbLogo;
@@ -71,7 +75,7 @@ public class TopMoviesActivity extends AppCompatActivity {
     }
 
     private void PutDataIntoRecyclerView(List<MovieModelClass> movieList){
-        MainActivity.adaptery = new Adaptery(this,movieList);
+        MainActivity.adaptery = new Adaptery(this,this::onMovieClick,movieList);
         // recyclerView.setLayoutManager(new LinearLayoutManager(this));
         topRecycler.setLayoutManager(new GridLayoutManager(this,3));
 
@@ -85,5 +89,12 @@ public class TopMoviesActivity extends AppCompatActivity {
     }
 
 
-
+    @Override
+    public void onMovieClick(View v, int position) {
+        Toast.makeText(TopMoviesActivity.this,topMovieList.get(position).getName(), Toast.LENGTH_SHORT).show();
+        MainActivity.id= topMovieList.get(position).getId();
+        MainActivity.name = topMovieList.get(position).getName();
+        MainActivity.img = topMovieList.get(position).getImage();
+        startActivity(new Intent(TopMoviesActivity.this, PopUpActivity.class));
+    }
 }
